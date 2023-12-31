@@ -1,0 +1,18 @@
+<h1>sus productos son :</h1>
+
+{{#each productosComprados}}
+    <div>
+        <img src="{{imagen}}" alt="{{title}}">
+        <h2>id : {{id}}</h2>
+        <h2>id del juego : {{codigo}}</h2>
+        <h2>cantidad : {{cantidad}}</h2>
+    </div>
+
+<button class="boton-borrar" id="{{id}}">eliminar producto </button>
+<br><br>
+{{/each}}
+<button id="botonVolver">volver para seguir comprando </button>
+<button id="botonfinalizar">finalizar compra </button>
+<br><br>
+
+<script src="/js/carrito.js"></script>

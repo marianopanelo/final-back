@@ -1,0 +1,20 @@
+<h1>usuarios:</h1>
+{{#each usuarios}}
+    <div>
+        <h2>nombre : {{nombre}}</h2>
+        <h2>apellido : {{apellido}}</h2>
+        <h2>email : {{email}}</h2>
+        <h2>rol : {{rolo}}</h2>
+        <h2>id : {{id}}</h2>
+    </div>
+    <form class="datos">
+        <label for="rol">Cambiar Rol</label>
+        <input type="hidden" name="id" value="{{id}}">
+        <input type="text" name="rol" placeholder="Nuevo Rol">
+        <input type="submit" value="Cambiar Rol">
+    </form>
+    <br><br>
+{{/each}}
+
+<script src="/js/admin.js"></script>
+
