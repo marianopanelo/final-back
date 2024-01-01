@@ -13,54 +13,28 @@ export default class carritoServiceMongo {
         return carritoTotal
     }
 
-    agregarAlCarrito = async (id) => {
-        try {
-            const productoAAgregar = await productosModelo.findById(id);
-            console.log("holaaaa3");
-            console.log(id);
-    
-
-    
-            const carrito = await carritoModelo.create({
-                codigo: productoAAgregar._id,
-            });
-    
-            // Insertar el carrito en la base de datos (si es necesario)
-            await carritoModelo.insertMany(carrito);
-    
-            // Buscar el carrito recién creado y poblado con la información del producto
-            const carritoPopulado = await carritoModelo
-                .findById(carrito._id)
-                .populate('cantidad._id'); // Popula usando la referencia correcta
-    
-            // Insertar el carrito poblado en la base de datos (si es necesario)
-            await carritoModelo.insertMany(carritoPopulado);
-    
-            return carritoPopulado;
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
-    };
+    agregarAlCarrito = async (nuevoProducto) => {
+        await carritoModelo.insertMany(nuevoProducto)
+    }
 
     agregarAlCarritoPopulate = async (nuevoProducto) => {
-        console.log("pruebaaaaaa");
-        console.log(nuevoProducto);
-    let productoCarrito = await carritoModelo.findOne({codigo : nuevoProducto})
-    let productoAAgregar = await productosModelo.findOne({codigo : nuevoProducto})
-
-    await carritoModelo.updateOne({ codigo: nuevoProducto }, { $set: productoCarrito });
-    let carritoYProducto = await carritoModelo.findOneAndUpdate({codigo : nuevoProducto}).populate(`cantidad.producto`)
+    console.log(nuevoProducto.codigo);
+    let productoCarrito = await carritoModelo.findOne({codigo : nuevoProducto.codigo})
+    let productoAAgregar = await productosModelo.findOne({_id : nuevoProducto.codigo})
+    productoCarrito.cantidad.push( {producto : productoAAgregar._id})
+    await carritoModelo.updateOne({ codigo: nuevoProducto.codigo }, { $set: productoCarrito });
+    let carritoYProducto = await carritoModelo.findOneAndUpdate({codigo : nuevoProducto.codigo}).populate(`cantidad.producto`)
+    console.log(JSON.stringify(carritoYProducto, null, '\t'));
     return carritoYProducto
     }
 
     buscarUnProductoCarrito = async (id) => {
-        let productoCarrito = await carritoModelo.findOne({codigo : id})
+        let productoCarrito = await carritoModelo.findOne({_id : id})
         return productoCarrito
     }
 
     modificarUnProductoCarrito = async (id, productoCarritoModificado) => {
-        await carritoModelo.updateOne( {codigo : id}, { $set: productoCarritoModificado });
+        await carritoModelo.updateOne( {_id : id}, { $set: productoCarritoModificado });
     }
 
     eliminarProducto = async (id) => {
@@ -94,7 +68,10 @@ export default class carritoServiceMongo {
             console.log("la cantidad total es: " + cantidadTotal);
             console.log("nombre de los juegos : " + pruductos[0].title);
             let stock = pruductos[0].stock - carritoTotal[i].cantidad.length;
+            console.log(stock);
             pruductos[0].stock = stock
+            console.log(pruductos);
+            console.log("verrrrrrrrrrrrrrrrr");
             if (pruductos[0].stock <= 0) {
             /*tengo q cambiar lo de stock */    console.log( "el producto " + pruductos[0].nombre + " no tiene suficiente stock , el stock actual es de " + pruductos[0].stock);
             } else {
@@ -111,6 +88,3 @@ export default class carritoServiceMongo {
      
 
 }
-//modificarProducto
-//productosService
-//buscarProductoPorId

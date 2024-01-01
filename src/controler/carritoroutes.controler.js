@@ -13,52 +13,46 @@ export const getVerCarrito = async(req,res) =>{
 
 // listo .... ver q tengoq  cambiar q si el producto ya exsiste no volver a agregar 
 export const postAgregarACarrito = async (req, res) => {
-    let nuevoProducto = req.body;
-    console.log(nuevoProducto);
-    if (!nuevoProducto.codigo) {
-        const error = CustomError.createError({
-            name: "error al cargar un producto al carrito",
-            message: "valores incompletos: cargar código del producto",
+    let nuevoProducto = req.body
+    if (!nuevoProducto.codigo){
+        CustomError.createError({
+            name: "error al cargar un producto al carrito " , 
+            message: "valores imncompletos cargar codigo del producto",
             code: EErrors.INVALID_TYPES_ERROR
-        });
-    
-        return res.status(400).send("Error al cargar un producto al carrito: " + error.message);
+        })
     }
-
-    await carritoService.agregarAlCarrito(nuevoProducto);
-    res.send("se agrego el producto con codigo " + nuevoProducto.codigo + " al carrito");
-
-    await carritoService.agregarAlCarritoPopulate(nuevoProducto);
+    
+    await carritoService.agregarAlCarrito(nuevoProducto)
+    res.send("se agrego el producto con codigo " + nuevoProducto.codigo + " al carrito")
+    // no entiendo porque me dejo de entrar al populate , hace 5 minutos lo probe y andaba
+    await carritoService.agregarAlCarritoPopulate(nuevoProducto)
     console.log(nuevoProducto);
-};
+}
 
 
-// listo
 export const postSumarCantidadCarrito = async (req, res) => {
     try {
-        let id = req.params.id;
-        let productoCarrito = await carritoService.buscarUnProductoCarrito({codigo : id});
-        console.log("hola");
-        console.log(productoCarrito);
-        console.log("hola 2");
-        if (productoCarrito) {
-            if (productoCarrito !== null) {
-                await carritoService.agregarAlCarritoPopulate(id);
+        const id = req.params.id;
+        const productoCarrito = await carritoService.buscarUnProductoCarrito(id);
 
-                res.send("Operación completada");
-            } else {
-                console.error('El producto en productoCarrito es null');
-                res.status(500).send("Error interno del servidor");
-            }
+        if (!productoCarrito) {
+            const error = CustomError.createError({
+                name: "error al sumarle cantidad al carrito",
+                message: "no existe producto con ese id",
+                code: EErrors.INVALID_TYPES_ERROR
+            });
+            res.status(400).send("Error al sumarle cantidad al carrito: " + error.message);
         } else {
-            await carritoService.agregarAlCarrito(id);
-            };
+            // Incrementar la propiedad 'cantidad' del producto
+            productoCarrito.cantidad++;
+            const productoConPopulate = await carritoService.agregarAlCarritoPopulate(productoCarrito);
+            res.send(`La cantidad del producto con ID ${id} se incrementó en el carrito con populate`);
+        }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send("Error interno del servidor");
     }
 };
-
 
 //listo
 export const deleteEliminarProducto = async (req, res) => {

@@ -1,4 +1,5 @@
 import { usuariosService } from "../services/factory.js";
+import { sendEmail } from "./email.controller.js";
 
 
 
@@ -33,10 +34,12 @@ function usuarioNoSeConectoEnLosUltimosDias(usuario, dias) {
 export const deleteBorrarUsuariosInactivos = async (req, res) => {
     try {
         let usuarios = await usuariosService.verTodosLosusUarios();
+
         
         let usuariosInactivos = usuarios.filter(usuario => usuarioNoSeConectoEnLosUltimosDias(usuario, 2) && usuario.role !== 'admin');
 
         for (const usuario of usuariosInactivos) {
+            await sendEmail(usuario)
             await usuariosService.BorrarUsuario(usuario._id); 
         }
 
@@ -50,6 +53,7 @@ export const deleteBorrarUsuariosInactivos = async (req, res) => {
 
 export const admin = async (req, res) => {
     let todosLosUsuarios = await usuariosService.verTodosLosusUarios();
+
         const usuariosdata = todosLosUsuarios.map(usuario => ({
             nombre: usuario.first_name,
             apellido: usuario.last_name,
@@ -59,7 +63,9 @@ export const admin = async (req, res) => {
 
         }));
         res.render('admin',{usuarios: usuariosdata});  
-};
+}
+    
+
 
 
 export const cambiarRol = async (req, res) => {
@@ -73,3 +79,13 @@ export const cambiarRol = async (req, res) => {
 
 
 
+export const eliminarUsuario = async (req, res) => {
+    let id = req.params.id;
+    try {
+        await usuariosService.BorrarUsuario(id);
+        res.send({ status: "completado", message: `Usuario con ID: ${id} eliminado` });
+    } catch (error) {
+        console.error('Error al eliminar el usuario:', error);
+        res.status(500).send({ status: "error", message: "No se pudo eliminar el usuario" });
+    }
+}

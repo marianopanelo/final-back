@@ -67,5 +67,3 @@ app.listen(PORT, () => {
     
     console.log(`Servidor abierto en el puerto ${PORT}`);
 });
-
-

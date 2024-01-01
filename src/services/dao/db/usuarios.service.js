@@ -37,6 +37,10 @@ export default class usuariosServisMongo {
         return  usuariosTotales
     }
 
+    buscarUsuarioPorId = async (id) => {
+        await usuarioModel.findOne({ _id: id });
+    }
+
     BorrarUsuario = async (id) => {
         await usuarioModel.deleteOne({ _id: id });
     }

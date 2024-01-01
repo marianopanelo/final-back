@@ -15,5 +15,7 @@ export default {
     persistence: program.opts().persist,
     ADMIN_EMAIL : process.env.ADMIN_EMAIL ,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD, 
-    role : process.env.role
+    role : process.env.role,
+    gmailAccount: process.env.GMAIL_ACCOUNT,
+    gmailAppPassword: process.env.GMAIL_APP_PASSWD,
 }
