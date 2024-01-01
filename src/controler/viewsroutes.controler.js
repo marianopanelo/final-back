@@ -44,12 +44,12 @@ export const getcarrito = async(req,res) =>{
     try {
         let carritoTotal = await carritoService.vertodos();
         const carritoData = await Promise.all(carritoTotal.map(async (carrito) => {
-            const productos = await productosService.buscarProductoPorId(carrito.codigo);
+            const productos = await productosService.buscarProductoPorId(carrito.cantidad[0].producto);
 
             const productoData = productos.map(producto => ({
+
                 imagen: producto.imagen,
             }))[0];
-
             return {
                 id: carrito._id,
                 codigo: carrito.codigo,
@@ -70,8 +70,16 @@ export const getcarrito = async(req,res) =>{
 
 export const getTicket = async(req,res) =>{
     let carritoTotal = await carritoService.verTiket()
+    console.log("hola2");
+    console.log(carritoTotal.carritoTotal);
+    console.log(carritoTotal.precioTotal);
+    console.log(carritoTotal.cantidadTotal);
+    console.log("hola2");
 
-    res.render('ticket', { carritoTotal });
+    res.render('ticket', 
+        {precioTotal: carritoTotal.precioTotal,
+        cantidadTotal: carritoTotal.cantidadTotal
+    });
 
 }
 

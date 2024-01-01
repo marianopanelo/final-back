@@ -1,3 +1,7 @@
+const irACarrito = document.getElementById('botonCarrito');
+const finalizarCompra = document.getElementById('finalizarCompra');
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const botonesComprar = document.querySelectorAll('.boton-comprar');
 
@@ -19,8 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error('Error en la solicitud');
                 }
 
-                const responseData = await response.json();
-                alert(responseData.message);
+                alert("producto agregado")
 
             } catch (error) {
                 console.error('Error en la solicitud:', error.message);

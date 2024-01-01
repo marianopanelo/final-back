@@ -81,18 +81,26 @@ export default class carritoServiceMongo {
             pruductos[0].stock = stock
             console.log(pruductos);
             console.log("verrrrrrrrrrrrrrrrr");
-            if (pruductos[0].stock <= 0) {
-            /*tengo q cambiar lo de stock */    console.log( "el producto " + pruductos[0].nombre + " no tiene suficiente stock , el stock actual es de " + pruductos[0].stock);
+            if (stock < 0) {
+            /*tengo q cambiar lo de stock */    
+            console.log( "el producto " + pruductos[0].nombre + " no tiene suficiente stock , el stock actual es de " + pruductos[0].stock);
             } else {
             let id = idProducto
+            console.log(idProducto);
+            console.log("hola");
             console.log(id);
+            console.log("hola");
             let productoCambiado = pruductos
             console.log(productoCambiado);
             //nose porque no me los temrina de modificar abajo 
             await productosService.modificarProducto(id , productoCambiado)
             }
         }
-        return carritoTotal
+        return {
+            carritoTotal: carritoTotal,
+            precioTotal: precioTotal,
+            cantidadTotal: cantidadTotal
+        };
     }
      
 
