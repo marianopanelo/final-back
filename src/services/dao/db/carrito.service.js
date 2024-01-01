@@ -20,7 +20,11 @@ export default class carritoServiceMongo {
     agregarAlCarritoPopulate = async (nuevoProducto) => {
     console.log(nuevoProducto.codigo);
     let productoCarrito = await carritoModelo.findOne({codigo : nuevoProducto.codigo})
+    console.log("hola2");
+    console.log(productoCarrito);
     let productoAAgregar = await productosModelo.findOne({_id : nuevoProducto.codigo})
+    console.log("hola2");
+    console.log(productoAAgregar);
     productoCarrito.cantidad.push( {producto : productoAAgregar._id})
     await carritoModelo.updateOne({ codigo: nuevoProducto.codigo }, { $set: productoCarrito });
     let carritoYProducto = await carritoModelo.findOneAndUpdate({codigo : nuevoProducto.codigo}).populate(`cantidad.producto`)
@@ -30,6 +34,11 @@ export default class carritoServiceMongo {
 
     buscarUnProductoCarrito = async (id) => {
         let productoCarrito = await carritoModelo.findOne({_id : id})
+        return productoCarrito
+    }
+
+    buscarUnProductoCarritoPorID = async (idProducto) => {
+        let productoCarrito = await carritoModelo.findOne({codigo : idProducto})
         return productoCarrito
     }
 
