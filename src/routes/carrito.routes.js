@@ -1,19 +1,20 @@
+import { auth } from "../controler/autenticate.controler.js";
 import { deleteEliminarcarito, deleteEliminarProducto, getVerCarrito, handlebars, postAgregarACarrito, postSumarCantidadCarrito } from "../controler/carritoroutes.controler.js";
 import { Router, response } from "express";
 
 const router = Router()
 
-router.get ("/" , getVerCarrito)
+router.get ("/" ,auth, getVerCarrito)
 
-router.post("/addProductosNoCarrito" , postAgregarACarrito)
+router.post("/addProductosNoCarrito" ,auth, postAgregarACarrito)
 
-router.post("/addProductoCarrito/:id",postSumarCantidadCarrito)
+router.post("/addProductoCarrito/:id",auth,postSumarCantidadCarrito)
 
-router.delete("/borrarProductoCarrito/:id" ,deleteEliminarProducto) 
+router.delete("/borrarProductoCarrito/:id" ,auth,deleteEliminarProducto) 
 
-router.delete("/borrartodoelcarrito" ,deleteEliminarcarito) 
+router.delete("/borrartodoelcarrito" ,auth,deleteEliminarcarito) 
 
-router.get ("/realTimeProducts" ,handlebars)
+router.get ("/realTimeProducts" ,auth,handlebars)
 
 
 export default router;

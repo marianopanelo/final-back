@@ -1,17 +1,18 @@
 import { Router, response } from "express";
 import { admin, cambiarRol, deleteBorrarUsuariosInactivos, eliminarUsuario, getVerTodosLosUsuarios } from "../controler/usuarios.controler.js";
+import { requireAdmin } from "../controler/autenticate.controler.js";
 
 const router = Router()
 
-router.get("/",getVerTodosLosUsuarios);
+router.get("/",requireAdmin,getVerTodosLosUsuarios);
 // falta mandar el mail q se borro el usuario 
-router.get("/borrarUsuariosInactivos",deleteBorrarUsuariosInactivos);
+router.get("/borrarUsuariosInactivos",requireAdmin,deleteBorrarUsuariosInactivos);
 
-router.get("/admin",admin);
+router.get("/admin",requireAdmin,admin);
 
-router.post("/cambiarRol/:id",cambiarRol);
+router.post("/cambiarRol/:id",requireAdmin,cambiarRol);
 
-router.delete("/eliminarUsuario/:id",eliminarUsuario);
+router.delete("/eliminarUsuario/:id",requireAdmin,eliminarUsuario);
 
 
 

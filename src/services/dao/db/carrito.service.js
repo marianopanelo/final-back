@@ -84,7 +84,11 @@ export default class carritoServiceMongo {
             if (stock < 0) {
             /*tengo q cambiar lo de stock */    
             console.log( "el producto " + pruductos[0].nombre + " no tiene suficiente stock , el stock actual es de " + pruductos[0].stock);
-            } else {
+            }else if (stock === 0){
+                let id = idProducto
+                console.log(id);
+                await productosService.BorrarProducto(id)
+            }else {
             let id = idProducto
             console.log(idProducto);
             console.log("hola");

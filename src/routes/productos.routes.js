@@ -1,19 +1,20 @@
 import { Router, response } from "express";
 import { deleteBorrarProducto, getBuscarProductoId, getVerProductos, postAgregarProducto, putModificarProducto } from "../controler/productosroutes.controller.js";
 import errorHandler from "../services/error/middlewares/tomaDeErrores.js";
+import { auth, requireAdmin, usuarioPremium } from "../controler/autenticate.controler.js";
 
 
 const router = Router();
 
-router.get ("/" , getVerProductos)
+router.get ("/" ,auth, getVerProductos)
 
-router.get("/:id", getBuscarProductoId)
+router.get("/:id",auth, getBuscarProductoId)
 
-router.post ("/addproduct" ,postAgregarProducto)
+router.post ("/addproduct" ,usuarioPremium,postAgregarProducto)
 
-router.put("/modificarproducto/:id" ,putModificarProducto)
+router.put("/modificarproducto/:id" ,usuarioPremium,putModificarProducto)
 
-router.delete ("/borrar/:productoId",deleteBorrarProducto) 
+router.delete ("/borrar/:productoId",requireAdmin,deleteBorrarProducto) 
 
 
 router.use(errorHandler);

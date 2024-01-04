@@ -2,7 +2,7 @@ import { usuariosService } from "../services/factory.js";
 
 export const postLoguinUsuario = async (req, res) => {
     const { email, contraseña } = req.body;
-    
+
     try {
         let ingresarUsuario = await usuariosService.buscarUsuario(email, contraseña);
         
@@ -13,7 +13,7 @@ export const postLoguinUsuario = async (req, res) => {
         ingresarUsuario.ultimaConexion = new Date().toISOString();
 
         await ingresarUsuario.save();
-
+        req.session.role = ingresarUsuario.role
         res.json(ingresarUsuario);
     } catch (error) {
         console.error('Error al intentar iniciar sesión:', error);
